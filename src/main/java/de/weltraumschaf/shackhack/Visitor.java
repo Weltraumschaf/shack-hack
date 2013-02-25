@@ -56,5 +56,4 @@ public class Visitor extends ShackHackBaseVisitor<String> {
         return visit(ctx.getChild(0));
     }
 
-
 }

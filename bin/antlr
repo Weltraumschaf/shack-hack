@@ -13,4 +13,5 @@
 #
 
 BASE_DIR="$(dirname $0)"
-java -jar "${BASE_DIR}/antlr-4.0-complete.jar -no-listener -visitor " $*
+export CLASSPATH="${BASE_DIR}"
+java -jar "${BASE_DIR}/antlr-4.0-complete.jar" -no-listener -visitor $*

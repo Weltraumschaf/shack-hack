@@ -13,15 +13,15 @@ grammar ShackHack;
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
 
-package de.weltraumschaf.shackhack;    
+package de.weltraumschaf.shackhack.antlr;
 }
 
-start       : ausdruck ;
-ausdruck    : left=ausdruck operator='*' right=ausdruck #mult
-            | left=ausdruck operator='/' right=ausdruck #div
-            | left=ausdruck operator='-' right=ausdruck #sub
-            | left=ausdruck operator='+' right=ausdruck #add
-            | '(' inBrace=ausdruck ')' #brace
+start       : expression ;
+expression  : left=expression operator='*' right=expression #mult
+            | left=expression operator='/' right=expression #div
+            | left=expression operator='-' right=expression #sub
+            | left=expression operator='+' right=expression #add
+            | '(' inBrace=expression ')' #brace
             | number=NUMBER #number
             ;
 

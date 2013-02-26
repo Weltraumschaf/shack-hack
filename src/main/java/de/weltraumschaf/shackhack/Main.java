@@ -10,11 +10,13 @@
  */
 package de.weltraumschaf.shackhack;
 
+import com.google.common.io.Files;
+import de.weltraumschaf.shackhack.antlr.ShackHackParser;
+import de.weltraumschaf.shackhack.antlr.ShackHackLexer;
 import java.io.IOException;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.TokenStream;
 
 /**
@@ -28,7 +30,7 @@ public class Main {
             + ".method public static main([Ljava/lang/String;)V%n"
             + "    .limit stack %d%n"
             + "    getstatic java/lang/System/out Ljava/io/PrintStream;%n%n";
-    private static final String FOOTER = ""
+    private static final String FOOTER = "%n"
             + "    invokevirtual java/io/PrintStream/println(I)V%n"
             + "    return%n.end method%n";
     private static final String ENCODING = "UTF-8";
@@ -40,16 +42,18 @@ public class Main {
         }
 
         final String source = args[0];
+        final StringBuilder buffer = new StringBuilder();
 
         try {
-            System.out.print(generatePreambel("ShackHack", STACK_SIZE));
-            System.out.println(indent(parseSource(source)));
-            System.out.println(generateFooter());
+            buffer.append(generatePreambel(extractClassName(source), STACK_SIZE));
+            buffer.append(indent(parseSource(source)));
+            buffer.append(generateFooter());
         } catch (IOException ex) {
             System.out.println(String.format("Can't read file '%s'!", source));
             System.exit(1);
         }
 
+        System.out.print(buffer.toString());
         System.exit(0);
     }
 
@@ -67,7 +71,7 @@ public class Main {
         final TokenStream tokens = new CommonTokenStream(lexer);
 
         final ShackHackParser parser = new ShackHackParser(tokens);
-        return new Visitor().visit(parser.start());
+        return new ByteCodeVisitor().visit(parser.start());
     }
 
     static String indent(final String in) {
@@ -79,4 +83,9 @@ public class Main {
 
         return buffer.toString();
     }
+
+    static String extractClassName(final String fileName) {
+        return Files.getNameWithoutExtension(fileName);
+    }
+
 }

@@ -12,7 +12,7 @@
     <description>
         Hacking with ANTLR.
     </description>
-    <url>https://github.com/Weltraumschaf/${artifactId}</url>
+    <url>https://github.com/Weltraumschaf/${project.artifactId}</url>
 
     <organization>
         <name>Weltraumschaf</name>
@@ -46,25 +46,25 @@
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/Weltraumschaf/${artifactId}/issues</url>
+        <url>https://github.com/Weltraumschaf/${project.artifactId}/issues</url>
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git://github.com/weltraumschaf/${artifactId}.git</connection>
-        <developerConnection>scm:git:git@github.com:weltraumschaf/${artifactId}.git</developerConnection>
-        <url>https://github.com/weltraumschaf/${artifactId}</url>
+        <connection>scm:git:git://github.com/weltraumschaf/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:git@github.com:weltraumschaf/${project.artifactId}.git</developerConnection>
+        <url>https://github.com/weltraumschaf/${project.artifactId}</url>
     </scm>
 
     <distributionManagement>
         <site>
             <id>github-project-site</id>
-            <url>gitsite:git@github.com/Weltraumschaf/${artifactId}.git</url>
+            <url>gitsite:git@github.com/Weltraumschaf/${project.artifactId}.git</url>
         </site>
     </distributionManagement>
 
     <ciManagement>
         <system>jenkins</system>
-        <url>http://www.weltraumschaf.de:8080/job/${artifactId}/</url>
+        <url>http://www.weltraumschaf.de:8080/job/${project.artifactId}/</url>
     </ciManagement>
 
     <properties>
@@ -83,6 +83,11 @@
             <groupId>org.antlr</groupId>
             <artifactId>antlr4</artifactId>
             <version>4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>14.0-rc3</version>
         </dependency>
     </dependencies>
 

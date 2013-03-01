@@ -68,21 +68,31 @@ class Command implements Runnable {
             throw new CommandException("Give at least one source file as argument!", ERR_NO_FILES_TOPARSE);
         }
 
-        // TODO do it for all
-        final String source = filesToParse.get(0);
-        final String className = extractClassName(source);
-        String asm = "";
-
-        try {
-            asm = new Generator().generate(className, parseSource(source));
-        } catch (IOException ex) {
-            throw new CommandException(String.format("Can't read file '%s'!", source), ERR_CANT_READ_FILE);
+        for (final String fileName : filesToParse) {
+            parseAndCompile(fileName);
         }
+    }
+
+    private void parseAndCompile(final String fileName) {
+        final String className = extractClassName(fileName);
+        final String asm = generateAssembly(className, fileName);
 
         if (echoAssembly) {
             out.println(asm);
         }
 
+        compileByteCode(asm, className);
+    }
+
+    private String generateAssembly(final String className, final String fileName) {
+        try {
+            return new Generator().generate(className, parseSource(fileName));
+        } catch (IOException ex) {
+            throw new CommandException(String.format("Can't read file '%s'!", fileName), ERR_CANT_READ_FILE); // NOPMD
+        }
+    }
+
+    private void compileByteCode(final String asm, final String className) {
         try {
             final ClassFile classFile = new ClassFile();
             classFile.readJasmin(new StringReader(asm), className, false);
@@ -97,10 +107,10 @@ class Command implements Runnable {
             classFile.write(outp);
             outp.close();
             out.println("Generated: " + outFile.getPath());
-        } catch (IOException ex) {
+        } catch (IOException ex) { // NOPMD
             // No IO errors w/ string readers
         } catch (Exception ex) {
-            throw new CommandException(ex.getMessage(), ERR_EXCEPTION_DUROING_ASSEMBLY);
+            throw new CommandException(ex.getMessage(), ERR_EXCEPTION_DUROING_ASSEMBLY); // NOPMD
         }
     }
 

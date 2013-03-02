@@ -17,13 +17,38 @@ package de.weltraumschaf.shackhack.antlr;
 }
 
 start       : expression ;
-expression  : left=expression operator='*' right=expression #mult
-            | left=expression operator='/' right=expression #div
-            | left=expression operator='-' right=expression #sub
-            | left=expression operator='+' right=expression #add
-            | '(' inBrace=expression ')' #brace
-            | number=NUMBER #number
-            ;
+expression  : left=expression operator=OP_STAR right=expression #mult
+            | left=expression operator=OP_SLASH right=expression #div
+            | left=expression operator=OP_PLUS right=expression #add
+            | left=expression operator=OP_MINUS right=expression #sub
+            | OP_LPAREN inBrace=expression OP_RPAREN #brace
+            | number=INTEGER #number ;
 
-NUMBER      : [0-9]+ ;
-WS          : [\r\n\t ]+ -> skip ;
+OP_STAR     : '*' ;
+OP_SLASH    : '/' ;
+OP_MINUS    : '-' ;
+OP_PLUS     : '+' ;
+OP_LPAREN   : '(' ;
+OP_RPAREN   : ')' ;
+OP_LCURLY   : '{' ;
+OP_RCURLY   : '}' ;
+
+MUL_OP      : OP_STAR | OP_SLASH ;
+ADD_OP      : OP_PLUS | OP_MINUS ;
+
+NL          : '\r'? '\n' -> skip ;
+WS          : [ \t]+ -> skip ;
+
+ID          : LETTER (LETTER | [0-9])* ;
+fragment
+LETTER      : [a-zA-Z] ;
+INTEGER     : [0-9]+ ;
+FLOAT       : ([0-9])+ '.' ([0-9])* EXPONENT?
+            | '.' ([0-9])+ EXPONENT?
+            | ([0-9])+ EXPONENT ;
+fragment
+EXPONENT    : ('e'|'E') ('+'|'-')? ([0-9])+ ;
+
+COMMENT     : ( SL_COMMENT | ML_COMMENT ) -> skip ;
+ML_COMMENT  : '/*' .*? '*/' ;
+SL_COMMENT  : '//' ~[\r\n]* '\r'? '\n' ;

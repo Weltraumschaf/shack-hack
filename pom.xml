@@ -293,6 +293,7 @@
                         <configuration>
                             <listener>false</listener>
                             <visitor>true</visitor>
+                            <outputDirectory>${basedir}/src/main/java/de/weltraumschaf/shackhack/antlr</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

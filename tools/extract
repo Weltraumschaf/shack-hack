@@ -1,0 +1,84 @@
+#!/usr/bin/env php
+<?php
+
+# format of input files.
+# Mnemonic | Opcode (in hex) | Other bytes | Stack [before] → [after] | Description
+
+class BC {
+    public $mnemonic;
+    public $opcode;
+    public $otherBytes;
+    public $stack;
+    public $description;
+}
+
+function extr($line) {
+    $parts = explode("|", $line);
+    $bc = new BC();
+    $bc->mnemonic    = trim($parts[0]);
+    $bc->opcode      = trim($parts[1]);
+    $bc->otherBytes  = trim($parts[2]);
+    $bc->stack       = trim($parts[3]);
+    $bc->description = trim($parts[4]);
+    return $bc;
+}
+
+$input = file_get_contents("./bytecodes");
+$lines = explode("\n", $input);
+$bytecodes = array();
+foreach ($lines as $line) {
+    $bytecodes[] = extr($line);
+}
+
+echo '/*
+ *  LICENSE
+ *
+ * "THE BEER-WARE LICENSE" (Revision 43):
+ * "Sven Strittmatter" <weltraumschaf@googlemail.com> wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
+ */
+
+package de.weltraumschaf.shackhack;
+
+/**
+ *
+ * @author Sven Strittmatter <weltraumschaf@googlemail.com>
+ */
+enum ByteCodes {' . "\n";
+$i = 1;
+foreach ($bytecodes as $bc) {
+    echo "    /**\n";
+    echo "     * " . ucfirst($bc->description) . ".\n";
+    if (!empty($bc->otherBytes)) {
+        echo "     *\n";
+        echo "     * Other bytes {$bc->otherBytes}\n";
+    }
+    if (!empty($bc->stack)) {
+        echo "     *\n";
+        echo "     * Stack [before] → [after]: " . $bc->stack . "\n";
+    }
+    echo "     */\n";
+    echo '    ' . strtoupper($bc->mnemonic) . '("' . $bc->mnemonic . '", (byte) 0x' . $bc->opcode . ')';
+    echo ($i < sizeof($bytecodes)) ? "," : ";";
+    echo "\n";
+    $i++;
+}
+
+echo "
+    private final String mnemonic;
+    private final byte opcode;
+
+    private ByteCodes(final String mnemonic, byte opcode) {
+        this.mnemonic = mnemonic;
+        this.opcode = opcode;
+    }
+
+    String mnemonic() {
+        return mnemonic;
+    }
+}
+";

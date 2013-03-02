@@ -28,22 +28,22 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<String> {
 
     @Override
     public String visitSub(final SubContext ctx) {
-        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.ISUB.cmd());
+        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.ISUB.mnemonic());
     }
 
     @Override
     public String visitAdd(final AddContext ctx) {
-        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.IADD.cmd());
+        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.IADD.mnemonic());
     }
 
     @Override
     public String visitMult(final MultContext ctx) {
-        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.IMUL.cmd());
+        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.IMUL.mnemonic());
     }
 
     @Override
     public String visitDiv(final DivContext ctx) {
-        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.IDIV.cmd());
+        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.IDIV.mnemonic());
     }
 
     @Override
@@ -53,7 +53,7 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<String> {
 
     @Override
     public String visitNumber(final ShackHackParser.NumberContext ctx) {
-        return String.format("%s %s", ByteCodes.LDC.cmd(), ctx.getText());
+        return String.format("%s %s", ByteCodes.LDC.mnemonic(), ctx.getText());
     }
 
     @Override

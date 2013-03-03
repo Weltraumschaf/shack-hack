@@ -11,26 +11,41 @@
 package de.weltraumschaf.shackhack;
 
 import java.io.PrintStream;
+import java.util.Arrays;
 
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Main {
+public final class Main extends BaseCommand implements Runnable {
 
-    private static final PrintStream ERR = System.err;
-    private static final PrintStream OUT = System.out;
+    public Main(String[] args, PrintStream out) {
+        super(Arrays.asList(args), out);
+    }
 
     public static void main(final String[] args) {
         try {
-            final Command cmd = new Command(args, OUT);
-            cmd.run();
+            new Main(args, System.out).run();
             System.exit(0);
         } catch (CommandException ex) {
-            ERR.println(ex.getMessage());
+            System.err.println(ex.getMessage());
             System.exit(ex.getReturnCode());
         }
 
     }
 
+    @Override
+    public void run() {
+        determineCommand().run();
+    }
+
+    private Runnable determineCommand() {
+        for (final String arg : getArgs()) {
+            if ("-t".equals(arg) || "--test".equals(arg)) {
+                return new TestCommand(getArgs(), getOut());
+            }
+        }
+
+        return new ShackHackCommand(getArgs(), getOut());
+    }
 }

@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
-import java.util.Arrays;
 import java.util.List;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CharStream;
@@ -32,27 +31,19 @@ import org.antlr.v4.runtime.TokenStream;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class Command implements Runnable {
+class ShackHackCommand extends BaseCommand implements Runnable {
 
     private static final String ENCODING = "UTF-8";
     private static final int ERR_NO_FILES_TOPARSE = -1;
     private static final int ERR_CANT_READ_FILE = -2;
     private static final int ERR_FOUND_ERRORS_IN_ASM = -3;
     private static final int ERR_EXCEPTION_DUROING_ASSEMBLY = -4;
-    private final PrintStream out;
-    private final List<String> args;
     private final List<String> filesToParse = Lists.newArrayList();
     private boolean echoHelp;
     private boolean echoAssembly;
 
-    public Command(final String[] args, final PrintStream out) {
-        this(Arrays.asList(args), out);
-    }
-
-    public Command(final List<String> args, final PrintStream out) {
-        super();
-        this.args = args;
-        this.out = out;
+    public ShackHackCommand(final List<String> args, final PrintStream out) {
+        super(args, out);
     }
 
     @Override
@@ -78,7 +69,7 @@ class Command implements Runnable {
         final String asm = generateAssembly(className, fileName);
 
         if (echoAssembly) {
-            out.println(asm);
+            getOut().println(asm);
         }
 
         compileByteCode(asm, className);
@@ -106,7 +97,7 @@ class Command implements Runnable {
             final FileOutputStream outp = new FileOutputStream(outFile);
             classFile.write(outp);
             outp.close();
-            out.println("Generated: " + outFile.getPath());
+            getOut().println("Generated: " + outFile.getPath());
         } catch (IOException ex) { // NOPMD
             // No IO errors w/ string readers
         } catch (Exception ex) {
@@ -128,7 +119,7 @@ class Command implements Runnable {
     }
 
     private void parseArguments() {
-        for (final String arg : args) {
+        for (final String arg : getArgs()) {
             if (arg.charAt(0) == '-') {
                 recognizeOption(arg);
             } else {
@@ -138,10 +129,10 @@ class Command implements Runnable {
     }
 
     private void printHelp() {
-        out.println("Usage: hack [-h|-?|--help] [-a|--assembly] <file1> [<file2> ... <fileN>]");
-        out.println();
-        out.println("-h|-?|--help   Show this help.");
-        out.println("-a|--assembly  Print assembly code to STDOUT.");
+        getOut().println("Usage: hack [-h|-?|--help] [-a|--assembly] <file1> [<file2> ... <fileN>]");
+        getOut().println();
+        getOut().println("-h|-?|--help   Show this help.");
+        getOut().println("-a|--assembly  Print assembly code to STDOUT.");
     }
 
     private void recognizeOption(final String option) {

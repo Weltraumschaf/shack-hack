@@ -23,14 +23,14 @@ public class CommandTest {
 
     @Test
     public void extractClassName() {
-        assertThat(Command.extractClassName(""), is(""));
-        assertThat(Command.extractClassName("FooBar"), is("FooBar"));
-        assertThat(Command.extractClassName("FooBar.hack"), is("FooBar"));
-        assertThat(Command.extractClassName("FooBar.bar"), is("FooBar"));
-        assertThat(Command.extractClassName("foo/bar/baz/FooBar.hack"), is("FooBar"));
-        assertThat(Command.extractClassName("foo/bar/baz/FooBar.bar"), is("FooBar"));
-        assertThat(Command.extractClassName("/foo/bar/baz/FooBar.hack"), is("FooBar"));
-        assertThat(Command.extractClassName("/foo/bar/baz/FooBar.bar"), is("FooBar"));
+        assertThat(ShackHackCommand.extractClassName(""), is(""));
+        assertThat(ShackHackCommand.extractClassName("FooBar"), is("FooBar"));
+        assertThat(ShackHackCommand.extractClassName("FooBar.hack"), is("FooBar"));
+        assertThat(ShackHackCommand.extractClassName("FooBar.bar"), is("FooBar"));
+        assertThat(ShackHackCommand.extractClassName("foo/bar/baz/FooBar.hack"), is("FooBar"));
+        assertThat(ShackHackCommand.extractClassName("foo/bar/baz/FooBar.bar"), is("FooBar"));
+        assertThat(ShackHackCommand.extractClassName("/foo/bar/baz/FooBar.hack"), is("FooBar"));
+        assertThat(ShackHackCommand.extractClassName("/foo/bar/baz/FooBar.bar"), is("FooBar"));
     }
 
 }

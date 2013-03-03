@@ -12,6 +12,7 @@
 
 package de.weltraumschaf.shackhack;
 
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
@@ -24,11 +25,13 @@ abstract class BaseCommand {
 
     private final List<String> args;
     private final PrintStream out;
+    private final InputStream in;
 
-    public BaseCommand(final List<String> args, final PrintStream out) {
+    public BaseCommand(final List<String> args, final PrintStream out, final InputStream in) {
         super();
         this.args = args;
         this.out = out;
+        this.in = in;
     }
 
     protected List<String> getArgs() {
@@ -38,5 +41,9 @@ abstract class BaseCommand {
     protected PrintStream getOut() {
         return out;
     }
+
+    protected InputStream getIn() {
+        return in;
+    }  
 
 }

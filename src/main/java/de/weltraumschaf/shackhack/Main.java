@@ -10,6 +10,7 @@
  */
 package de.weltraumschaf.shackhack;
 
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 
@@ -19,13 +20,13 @@ import java.util.Arrays;
  */
 public final class Main extends BaseCommand implements Runnable {
 
-    public Main(String[] args, PrintStream out) {
-        super(Arrays.asList(args), out);
+    public Main(final String[] args, final PrintStream out, final InputStream in) {
+        super(Arrays.asList(args), out, in);
     }
 
     public static void main(final String[] args) {
         try {
-            new Main(args, System.out).run();
+            new Main(args, System.out, System.in).run();
             System.exit(0);
         } catch (CommandException ex) {
             System.err.println(ex.getMessage());
@@ -42,10 +43,10 @@ public final class Main extends BaseCommand implements Runnable {
     private Runnable determineCommand() {
         for (final String arg : getArgs()) {
             if ("-t".equals(arg) || "--test".equals(arg)) {
-                return new TestCommand(getArgs(), getOut());
+                return new TestCommand(getArgs(), getOut(), getIn());
             }
         }
 
-        return new ShackHackCommand(getArgs(), getOut());
+        return new ShackHackCommand(getArgs(), getOut(), getIn());
     }
 }

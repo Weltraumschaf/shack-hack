@@ -19,6 +19,7 @@ import jasmin.ClassFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.List;
@@ -34,7 +35,7 @@ import org.antlr.v4.runtime.TokenStream;
 class ShackHackCommand extends BaseCommand implements Runnable {
 
     private static final String ENCODING = "UTF-8";
-    private static final int ERR_NO_FILES_TOPARSE = -1;
+    private static final int ERR_NO_FILES_TO_PARSE = -1;
     private static final int ERR_CANT_READ_FILE = -2;
     private static final int ERR_FOUND_ERRORS_IN_ASM = -3;
     private static final int ERR_EXCEPTION_DUROING_ASSEMBLY = -4;
@@ -42,8 +43,8 @@ class ShackHackCommand extends BaseCommand implements Runnable {
     private boolean echoHelp;
     private boolean echoAssembly;
 
-    public ShackHackCommand(final List<String> args, final PrintStream out) {
-        super(args, out);
+    public ShackHackCommand(final List<String> args, final PrintStream out, final InputStream in) {
+        super(args, out, in);
     }
 
     @Override
@@ -56,7 +57,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         }
 
         if (filesToParse.isEmpty()) {
-            throw new CommandException("Give at least one source file as argument!", ERR_NO_FILES_TOPARSE);
+            throw new CommandException("Give at least one source file as argument!", ERR_NO_FILES_TO_PARSE);
         }
 
         for (final String fileName : filesToParse) {

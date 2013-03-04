@@ -4,6 +4,7 @@
 *.war
 *.ear
 /nbactions.xml
+/nb-configuration.xml
 *.tokens
 /code
 *.sublime-project

@@ -18,6 +18,12 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface ShackHackVisitor<T> extends ParseTreeVisitor<T> {
+	T visitAssign(ShackHackParser.AssignContext ctx);
+
+	T visitBlank(ShackHackParser.BlankContext ctx);
+
+	T visitPrintExpr(ShackHackParser.PrintExprContext ctx);
+
 	T visitBrace(ShackHackParser.BraceContext ctx);
 
 	T visitInteger(ShackHackParser.IntegerContext ctx);

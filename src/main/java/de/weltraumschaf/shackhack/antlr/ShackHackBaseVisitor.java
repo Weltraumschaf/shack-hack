@@ -19,6 +19,12 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class ShackHackBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements ShackHackVisitor<T> {
+	@Override public T visitAssign(ShackHackParser.AssignContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitBlank(ShackHackParser.BlankContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitPrintExpr(ShackHackParser.PrintExprContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitBrace(ShackHackParser.BraceContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitInteger(ShackHackParser.IntegerContext ctx) { return visitChildren(ctx); }

@@ -103,7 +103,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         }
     }
 
-    static String parseSource(final String filename) throws IOException {
+    static List<Instruction> parseSource(final String filename) throws IOException {
         final CharStream input = new ANTLRFileStream(filename, ENCODING);
         final ShackHackLexer lexer = new ShackHackLexer(input);
         final TokenStream tokens = new CommonTokenStream(lexer);

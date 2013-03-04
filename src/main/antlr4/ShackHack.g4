@@ -16,17 +16,19 @@ grammar ShackHack;
 package de.weltraumschaf.shackhack.antlr;
 }
 
-start       : expression ;
+start       : statement+ ;
+statement   : expression NL                     # printExpr
+            | IDENTIFIER OP_EQUAL expression NL # assign
+            | NL                                # blank
+            ;
 expression  : left=expression operator=( OP_STAR | OP_SLASH ) right=expression  # mulDiv
             | left=expression operator=( OP_PLUS | OP_MINUS ) right=expression  # addSub
             | INTEGER                                           # integer
             | IDENTIFIER                                        # identifer
             | OP_LPAREN inBrace=expression OP_RPAREN            # brace
             ;
-/*
-mulOps     : ( OP_STAR | OP_SLASH ) ;
-addOps     : ( OP_PLUS | OP_MINUS ) ;
-*/
+
+OP_EQUAL    : '=' ;
 OP_STAR     : '*' ;
 OP_SLASH    : '/' ;
 OP_MINUS    : '-' ;

@@ -18,7 +18,7 @@ package de.weltraumschaf.shackhack;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-enum ByteCodes {
+enum ByteCode {
 
     /**
      * Load onto the stack a reference from an array.
@@ -1405,7 +1405,7 @@ enum ByteCodes {
     private final String mnemonic;
     private final byte opcode;
 
-    private ByteCodes(final String mnemonic, final byte opcode) {
+    private ByteCode(final String mnemonic, final byte opcode) {
         this.mnemonic = mnemonic;
         this.opcode = opcode;
     }

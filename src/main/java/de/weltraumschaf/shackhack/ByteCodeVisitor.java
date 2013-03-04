@@ -11,55 +11,95 @@
  */
 package de.weltraumschaf.shackhack;
 
+import com.google.common.collect.Lists;
+import de.weltraumschaf.shackhack.CommandException.Code;
 import de.weltraumschaf.shackhack.antlr.ShackHackBaseVisitor;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser;
+import de.weltraumschaf.shackhack.antlr.ShackHackParser.AddSubContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.BraceContext;
+import de.weltraumschaf.shackhack.antlr.ShackHackParser.IdentiferContext;
+import de.weltraumschaf.shackhack.antlr.ShackHackParser.IntegerContext;
+import de.weltraumschaf.shackhack.antlr.ShackHackParser.MulDivContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.StartContext;
+import java.util.List;
 
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class ByteCodeVisitor extends ShackHackBaseVisitor<String> {
+final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
 
     @Override
-    public String visitMulDiv(final ShackHackParser.MulDivContext ctx) {
-        final String left = visit(ctx.left);
-        final String right = visit(ctx.right);
-        final String mnemonic = ctx.operator.getType() == ShackHackParser.OP_STAR
-                ? ByteCodes.IMUL.mnemonic()
-                : ByteCodes.IDIV.mnemonic();
-        return String.format("%s%n%s%n%s", left, right, mnemonic);
+    public List<Instruction> visitMulDiv(final MulDivContext ctx) {
+        final List<Instruction> instructions = Lists.newArrayList();
+        instructions.addAll(visit(ctx.left));
+        instructions.addAll(visit(ctx.right));
+
+        if (ctx.operator.getType() == ShackHackParser.OP_STAR) {
+            instructions.add(Instruction.newInstance(ByteCode.IMUL));
+        } else if (ctx.operator.getType() == ShackHackParser.OP_SLASH) {
+            instructions.add(Instruction.newInstance(ByteCode.IDIV));
+        } else {
+            throw new CommandException("Unexpected operator: " + ctx.operator, Code.SYNTAX_ERROR);
+        }
+
+        return instructions;
     }
 
     @Override
-    public String visitAddSub(final ShackHackParser.AddSubContext ctx) {
-        final String left = visit(ctx.left);
-        final String right = visit(ctx.right);
-        final String mnemonic = ctx.operator.getType() == ShackHackParser.OP_PLUS
-                ? ByteCodes.IADD.mnemonic()
-                : ByteCodes.ISUB.mnemonic();
-        return String.format("%s%n%s%n%s", left, right, mnemonic);
+    public List<Instruction> visitAddSub(final AddSubContext ctx) {
+        final List<Instruction> instructions = Lists.newArrayList();
+        instructions.addAll(visit(ctx.left));
+        instructions.addAll(visit(ctx.right));
+
+        if (ctx.operator.getType() == ShackHackParser.OP_PLUS) {
+            instructions.add(Instruction.newInstance(ByteCode.IADD));
+        } else if (ctx.operator.getType() == ShackHackParser.OP_MINUS) {
+            instructions.add(Instruction.newInstance(ByteCode.ISUB));
+        } else {
+            throw new CommandException("Unexpected operator: " + ctx.operator, Code.SYNTAX_ERROR);
+        }
+
+        return instructions;
     }
 
     @Override
-    public String visitBrace(final BraceContext ctx) {
+    public List<Instruction> visitBrace(final BraceContext ctx) {
         return visit(ctx.inBrace);
     }
 
     @Override
-    public String visitInteger(ShackHackParser.IntegerContext ctx) {
-        return String.format("%s %s", ByteCodes.LDC.mnemonic(), ctx.getText());
+    public List<Instruction> visitInteger(final IntegerContext ctx) {
+        return Lists.newArrayList(Instruction.newInstance(ByteCode.LDC, Integer.valueOf(ctx.getText())));
     }
 
     @Override
-    public String visitIdentifer(ShackHackParser.IdentiferContext ctx) {
-        return super.visitIdentifer(ctx); //To change body of generated methods, choose Tools | Templates.
+    public List<Instruction> visitIdentifer(final IdentiferContext ctx) {
+        // TODO Implement
+        return Lists.newArrayList();
     }
 
     @Override
-    public String visitStart(StartContext ctx) {
+    public List<Instruction> visitStart(final StartContext ctx) {
         return visit(ctx.getChild(0));
     }
+
+    @Override
+    public List<Instruction> visitAssign(ShackHackParser.AssignContext ctx) {
+        // TODO Implement
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public List<Instruction> visitBlank(ShackHackParser.BlankContext ctx) {
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public List<Instruction> visitPrintExpr(ShackHackParser.PrintExprContext ctx) {
+        return visit(ctx.getChild(0));
+    }
+
+
 
 }

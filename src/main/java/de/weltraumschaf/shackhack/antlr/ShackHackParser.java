@@ -29,17 +29,17 @@ public class ShackHackParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		OP_STAR=1, OP_SLASH=2, OP_MINUS=3, OP_PLUS=4, OP_LPAREN=5, OP_RPAREN=6, 
-		OP_LCURLY=7, OP_RCURLY=8, NL=9, WS=10, IDENTIFIER=11, INTEGER=12, FLOAT=13, 
-		COMMENT=14, SL_COMMENT=15;
+		OP_EQUAL=1, OP_STAR=2, OP_SLASH=3, OP_MINUS=4, OP_PLUS=5, OP_LPAREN=6, 
+		OP_RPAREN=7, OP_LCURLY=8, OP_RCURLY=9, NL=10, WS=11, IDENTIFIER=12, INTEGER=13, 
+		FLOAT=14, COMMENT=15, SL_COMMENT=16;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'*'", "'/'", "'-'", "'+'", "'('", "')'", "'{'", "'}'", "NL", 
-		"WS", "IDENTIFIER", "INTEGER", "FLOAT", "COMMENT", "SL_COMMENT"
+		"<INVALID>", "'='", "'*'", "'/'", "'-'", "'+'", "'('", "')'", "'{'", "'}'", 
+		"NL", "WS", "IDENTIFIER", "INTEGER", "FLOAT", "COMMENT", "SL_COMMENT"
 	};
 	public static final int
-		RULE_start = 0, RULE_expression = 1;
+		RULE_start = 0, RULE_statement = 1, RULE_expression = 2;
 	public static final String[] ruleNames = {
-		"start", "expression"
+		"start", "statement", "expression"
 	};
 
 	@Override
@@ -59,8 +59,11 @@ public class ShackHackParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class StartContext extends ParserRuleContext {
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+		public List<StatementContext> statement() {
+			return getRuleContexts(StatementContext.class);
+		}
+		public StatementContext statement(int i) {
+			return getRuleContext(StatementContext.class,i);
 		}
 		public StartContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -76,10 +79,116 @@ public class ShackHackParser extends Parser {
 	public final StartContext start() throws RecognitionException {
 		StartContext _localctx = new StartContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_start);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(4); expression(0);
+			setState(7); 
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			do {
+				{
+				{
+				setState(6); statement();
+				}
+				}
+				setState(9); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OP_LPAREN) | (1L << NL) | (1L << IDENTIFIER) | (1L << INTEGER))) != 0) );
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class StatementContext extends ParserRuleContext {
+		public StatementContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_statement; }
+	 
+		public StatementContext() { }
+		public void copyFrom(StatementContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class AssignContext extends StatementContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode OP_EQUAL() { return getToken(ShackHackParser.OP_EQUAL, 0); }
+		public TerminalNode NL() { return getToken(ShackHackParser.NL, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(ShackHackParser.IDENTIFIER, 0); }
+		public AssignContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitAssign(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class PrintExprContext extends StatementContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode NL() { return getToken(ShackHackParser.NL, 0); }
+		public PrintExprContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitPrintExpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class BlankContext extends StatementContext {
+		public TerminalNode NL() { return getToken(ShackHackParser.NL, 0); }
+		public BlankContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitBlank(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final StatementContext statement() throws RecognitionException {
+		StatementContext _localctx = new StatementContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_statement);
+		try {
+			setState(20);
+			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+			case 1:
+				_localctx = new PrintExprContext(_localctx);
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(11); expression(0);
+				setState(12); match(NL);
+				}
+				break;
+
+			case 2:
+				_localctx = new AssignContext(_localctx);
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(14); match(IDENTIFIER);
+				setState(15); match(OP_EQUAL);
+				setState(16); expression(0);
+				setState(17); match(NL);
+				}
+				break;
+
+			case 3:
+				_localctx = new BlankContext(_localctx);
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(19); match(NL);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -184,14 +293,14 @@ public class ShackHackParser extends Parser {
 		int _parentState = getState();
 		ExpressionContext _localctx = new ExpressionContext(_ctx, _parentState, _p);
 		ExpressionContext _prevctx = _localctx;
-		int _startState = 2;
+		int _startState = 4;
 		enterRecursionRule(_localctx, RULE_expression);
 		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(13);
+			setState(29);
 			switch (_input.LA(1)) {
 			case INTEGER:
 				{
@@ -199,7 +308,7 @@ public class ShackHackParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(7); match(INTEGER);
+				setState(23); match(INTEGER);
 				}
 				break;
 			case IDENTIFIER:
@@ -207,7 +316,7 @@ public class ShackHackParser extends Parser {
 				_localctx = new IdentiferContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(8); match(IDENTIFIER);
+				setState(24); match(IDENTIFIER);
 				}
 				break;
 			case OP_LPAREN:
@@ -215,40 +324,40 @@ public class ShackHackParser extends Parser {
 				_localctx = new BraceContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(9); match(OP_LPAREN);
-				setState(10); ((BraceContext)_localctx).inBrace = expression(0);
-				setState(11); match(OP_RPAREN);
+				setState(25); match(OP_LPAREN);
+				setState(26); ((BraceContext)_localctx).inBrace = expression(0);
+				setState(27); match(OP_RPAREN);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(23);
+			setState(39);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
 			while ( _alt!=2 && _alt!=-1 ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(21);
-					switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+					setState(37);
+					switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 					case 1:
 						{
 						_localctx = new MulDivContext(new ExpressionContext(_parentctx, _parentState, _p));
 						((MulDivContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(15);
+						setState(31);
 						if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
-						setState(16);
+						setState(32);
 						((MulDivContext)_localctx).operator = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==OP_STAR || _la==OP_SLASH) ) {
 							((MulDivContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
 						}
 						consume();
-						setState(17); ((MulDivContext)_localctx).right = expression(6);
+						setState(33); ((MulDivContext)_localctx).right = expression(6);
 						}
 						break;
 
@@ -257,24 +366,24 @@ public class ShackHackParser extends Parser {
 						_localctx = new AddSubContext(new ExpressionContext(_parentctx, _parentState, _p));
 						((AddSubContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(18);
+						setState(34);
 						if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
-						setState(19);
+						setState(35);
 						((AddSubContext)_localctx).operator = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==OP_MINUS || _la==OP_PLUS) ) {
 							((AddSubContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
 						}
 						consume();
-						setState(20); ((AddSubContext)_localctx).right = expression(5);
+						setState(36); ((AddSubContext)_localctx).right = expression(5);
 						}
 						break;
 					}
 					} 
 				}
-				setState(25);
+				setState(41);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
 			}
 			}
 		}
@@ -291,7 +400,7 @@ public class ShackHackParser extends Parser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 1: return expression_sempred((ExpressionContext)_localctx, predIndex);
+		case 2: return expression_sempred((ExpressionContext)_localctx, predIndex);
 		}
 		return true;
 	}
@@ -305,14 +414,18 @@ public class ShackHackParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\2\3\21\35\4\2\t\2\4\3\t\3\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\20"+
-		"\n\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3\30\n\3\f\3\16\3\33\13\3\3\3\2\4\2\4\2"+
-		"\4\3\3\4\3\5\6\36\2\6\3\2\2\2\4\17\3\2\2\2\6\7\5\4\3\2\7\3\3\2\2\2\b\t"+
-		"\b\3\1\2\t\20\7\16\2\2\n\20\7\r\2\2\13\f\7\7\2\2\f\r\5\4\3\2\r\16\7\b"+
-		"\2\2\16\20\3\2\2\2\17\b\3\2\2\2\17\n\3\2\2\2\17\13\3\2\2\2\20\31\3\2\2"+
-		"\2\21\22\6\3\2\3\22\23\t\2\2\2\23\30\5\4\3\2\24\25\6\3\3\3\25\26\t\3\2"+
-		"\2\26\30\5\4\3\2\27\21\3\2\2\2\27\24\3\2\2\2\30\33\3\2\2\2\31\27\3\2\2"+
-		"\2\31\32\3\2\2\2\32\5\3\2\2\2\33\31\3\2\2\2\5\17\27\31";
+		"\2\3\22-\4\2\t\2\4\3\t\3\4\4\t\4\3\2\6\2\n\n\2\r\2\16\2\13\3\3\3\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\3\5\3\27\n\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4 \n"+
+		"\4\3\4\3\4\3\4\3\4\3\4\3\4\7\4(\n\4\f\4\16\4+\13\4\3\4\2\5\2\4\6\2\4\3"+
+		"\4\5\3\6\7\60\2\t\3\2\2\2\4\26\3\2\2\2\6\37\3\2\2\2\b\n\5\4\3\2\t\b\3"+
+		"\2\2\2\n\13\3\2\2\2\13\t\3\2\2\2\13\f\3\2\2\2\f\3\3\2\2\2\r\16\5\6\4\2"+
+		"\16\17\7\f\2\2\17\27\3\2\2\2\20\21\7\16\2\2\21\22\7\3\2\2\22\23\5\6\4"+
+		"\2\23\24\7\f\2\2\24\27\3\2\2\2\25\27\7\f\2\2\26\r\3\2\2\2\26\20\3\2\2"+
+		"\2\26\25\3\2\2\2\27\5\3\2\2\2\30\31\b\4\1\2\31 \7\17\2\2\32 \7\16\2\2"+
+		"\33\34\7\b\2\2\34\35\5\6\4\2\35\36\7\t\2\2\36 \3\2\2\2\37\30\3\2\2\2\37"+
+		"\32\3\2\2\2\37\33\3\2\2\2 )\3\2\2\2!\"\6\4\2\3\"#\t\2\2\2#(\5\6\4\2$%"+
+		"\6\4\3\3%&\t\3\2\2&(\5\6\4\2\'!\3\2\2\2\'$\3\2\2\2(+\3\2\2\2)\'\3\2\2"+
+		"\2)*\3\2\2\2*\7\3\2\2\2+)\3\2\2\2\7\13\26\37\')";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {

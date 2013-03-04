@@ -12,6 +12,8 @@
 
 package de.weltraumschaf.shackhack;
 
+import java.util.List;
+
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
@@ -31,9 +33,13 @@ class Generator {
 
     private final StringBuilder buffer = new StringBuilder();
 
-    String generate(final String className, final String asm) {
+    String generate(final String className, final List<Instruction> instructions) {
         buffer.append(generatePreambel(className, STACK_SIZE));
-        buffer.append(indent(asm));
+
+        for (final Instruction instruction : instructions) {
+            buffer.append(String.format("    %s%n", instruction));
+        }
+
         buffer.append(generateFooter());
         return buffer.toString();
     }
@@ -44,16 +50,6 @@ class Generator {
 
     static String generateFooter() {
         return String.format(FOOTER);
-    }
-
-    static String indent(final String in) {
-        final StringBuilder buffer = new StringBuilder();
-
-        for (final String line : in.split(String.format("%n"))) {
-            buffer.append(String.format("    %s%n", line));
-        }
-
-        return buffer.toString();
     }
 
 }

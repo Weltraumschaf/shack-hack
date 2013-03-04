@@ -26,11 +26,7 @@ public interface ShackHackVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitMulDiv(ShackHackParser.MulDivContext ctx);
 
-	T visitAddOps(ShackHackParser.AddOpsContext ctx);
-
 	T visitAddSub(ShackHackParser.AddSubContext ctx);
-
-	T visitMulOps(ShackHackParser.MulOpsContext ctx);
 
 	T visitIdentifer(ShackHackParser.IdentiferContext ctx);
 }

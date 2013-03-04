@@ -27,11 +27,7 @@ public class ShackHackBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 
 	@Override public T visitMulDiv(ShackHackParser.MulDivContext ctx) { return visitChildren(ctx); }
 
-	@Override public T visitAddOps(ShackHackParser.AddOpsContext ctx) { return visitChildren(ctx); }
-
 	@Override public T visitAddSub(ShackHackParser.AddSubContext ctx) { return visitChildren(ctx); }
-
-	@Override public T visitMulOps(ShackHackParser.MulOpsContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitIdentifer(ShackHackParser.IdentiferContext ctx) { return visitChildren(ctx); }
 }

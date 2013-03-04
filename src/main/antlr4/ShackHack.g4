@@ -17,11 +17,16 @@ package de.weltraumschaf.shackhack.antlr;
 }
 
 start       : expression ;
-expression  : left=expression operator=(OP_STAR | OP_SLASH) right=expression  # mulDiv
-            | left=expression operator=(OP_PLUS | OP_MINUS) right=expression  # addSub
-            | OP_LPAREN inBrace=expression OP_RPAREN #brace
-            | number=INTEGER #number ;
-
+expression  : left=expression operator=( OP_STAR | OP_SLASH ) right=expression  # mulDiv
+            | left=expression operator=( OP_PLUS | OP_MINUS ) right=expression  # addSub
+            | INTEGER                                           # integer
+            | IDENTIFIER                                        # identifer
+            | OP_LPAREN inBrace=expression OP_RPAREN            # brace
+            ;
+/*
+mulOps     : ( OP_STAR | OP_SLASH ) ;
+addOps     : ( OP_PLUS | OP_MINUS ) ;
+*/
 OP_STAR     : '*' ;
 OP_SLASH    : '/' ;
 OP_MINUS    : '-' ;
@@ -34,7 +39,7 @@ OP_RCURLY   : '}' ;
 NL          : '\r'? '\n' -> skip ;
 WS          : [ \t]+ -> skip ;
 
-ID          : LETTER (LETTER | [0-9])* ;
+IDENTIFIER  : LETTER (LETTER | [0-9])* ;
 fragment
 LETTER      : [a-zA-Z] ;
 INTEGER     : [0-9]+ ;
@@ -45,5 +50,6 @@ fragment
 EXPONENT    : ('e'|'E') ('+'|'-')? ([0-9])+ ;
 
 COMMENT     : ( SL_COMMENT | ML_COMMENT ) -> skip ;
+fragment
 ML_COMMENT  : '/*' .*? '*/' ;
 SL_COMMENT  : '//' ~[\r\n]* '\r'? '\n' ;

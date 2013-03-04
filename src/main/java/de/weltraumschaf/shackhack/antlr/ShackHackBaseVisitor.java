@@ -19,21 +19,21 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class ShackHackBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements ShackHackVisitor<T> {
-	@Override public T visitAssign(ShackHackParser.AssignContext ctx) { return visitChildren(ctx); }
-
-	@Override public T visitBlank(ShackHackParser.BlankContext ctx) { return visitChildren(ctx); }
-
-	@Override public T visitPrintExpr(ShackHackParser.PrintExprContext ctx) { return visitChildren(ctx); }
-
-	@Override public T visitBrace(ShackHackParser.BraceContext ctx) { return visitChildren(ctx); }
-
-	@Override public T visitInteger(ShackHackParser.IntegerContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIntegerExpression(ShackHackParser.IntegerExpressionContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitStart(ShackHackParser.StartContext ctx) { return visitChildren(ctx); }
 
-	@Override public T visitMulDiv(ShackHackParser.MulDivContext ctx) { return visitChildren(ctx); }
+	@Override public T visitExpressionStatement(ShackHackParser.ExpressionStatementContext ctx) { return visitChildren(ctx); }
 
-	@Override public T visitAddSub(ShackHackParser.AddSubContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignStatement(ShackHackParser.AssignStatementContext ctx) { return visitChildren(ctx); }
 
-	@Override public T visitIdentifer(ShackHackParser.IdentiferContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParenExpression(ShackHackParser.ParenExpressionContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitAddSubExpression(ShackHackParser.AddSubExpressionContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitIdentiferExpression(ShackHackParser.IdentiferExpressionContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitMulDivExpression(ShackHackParser.MulDivExpressionContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitEmptyStatement(ShackHackParser.EmptyStatementContext ctx) { return visitChildren(ctx); }
 }

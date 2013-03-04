@@ -18,21 +18,21 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface ShackHackVisitor<T> extends ParseTreeVisitor<T> {
-	T visitAssign(ShackHackParser.AssignContext ctx);
-
-	T visitBlank(ShackHackParser.BlankContext ctx);
-
-	T visitPrintExpr(ShackHackParser.PrintExprContext ctx);
-
-	T visitBrace(ShackHackParser.BraceContext ctx);
-
-	T visitInteger(ShackHackParser.IntegerContext ctx);
+	T visitIntegerExpression(ShackHackParser.IntegerExpressionContext ctx);
 
 	T visitStart(ShackHackParser.StartContext ctx);
 
-	T visitMulDiv(ShackHackParser.MulDivContext ctx);
+	T visitExpressionStatement(ShackHackParser.ExpressionStatementContext ctx);
 
-	T visitAddSub(ShackHackParser.AddSubContext ctx);
+	T visitAssignStatement(ShackHackParser.AssignStatementContext ctx);
 
-	T visitIdentifer(ShackHackParser.IdentiferContext ctx);
+	T visitParenExpression(ShackHackParser.ParenExpressionContext ctx);
+
+	T visitAddSubExpression(ShackHackParser.AddSubExpressionContext ctx);
+
+	T visitIdentiferExpression(ShackHackParser.IdentiferExpressionContext ctx);
+
+	T visitMulDivExpression(ShackHackParser.MulDivExpressionContext ctx);
+
+	T visitEmptyStatement(ShackHackParser.EmptyStatementContext ctx);
 }

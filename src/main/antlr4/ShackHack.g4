@@ -17,15 +17,15 @@ package de.weltraumschaf.shackhack.antlr;
 }
 
 start       : statement+ ;
-statement   : expression NL                     # printExpr
-            | IDENTIFIER OP_EQUAL expression NL # assign
-            | NL                                # blank
+statement   : expression NL                     # expressionStatement
+            | IDENTIFIER OP_EQUAL expression NL # assignStatement
+            | NL                                # emptyStatement
             ;
-expression  : left=expression operator=( OP_STAR | OP_SLASH ) right=expression  # mulDiv
-            | left=expression operator=( OP_PLUS | OP_MINUS ) right=expression  # addSub
-            | INTEGER                                           # integer
-            | IDENTIFIER                                        # identifer
-            | OP_LPAREN inBrace=expression OP_RPAREN            # brace
+expression  : left=expression operator=( OP_STAR | OP_SLASH ) right=expression  # mulDivExpression
+            | left=expression operator=( OP_PLUS | OP_MINUS ) right=expression  # addSubExpression
+            | INTEGER                                           # integerExpression
+            | IDENTIFIER                                        # identiferExpression
+            | OP_LPAREN inBrace=expression OP_RPAREN            # parenExpression
             ;
 
 OP_EQUAL    : '=' ;

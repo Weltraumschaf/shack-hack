@@ -120,38 +120,38 @@ public class ShackHackParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class AssignContext extends StatementContext {
+	public static class ExpressionStatementContext extends StatementContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode NL() { return getToken(ShackHackParser.NL, 0); }
+		public ExpressionStatementContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitExpressionStatement(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class AssignStatementContext extends StatementContext {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public TerminalNode OP_EQUAL() { return getToken(ShackHackParser.OP_EQUAL, 0); }
 		public TerminalNode NL() { return getToken(ShackHackParser.NL, 0); }
 		public TerminalNode IDENTIFIER() { return getToken(ShackHackParser.IDENTIFIER, 0); }
-		public AssignContext(StatementContext ctx) { copyFrom(ctx); }
+		public AssignStatementContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitAssign(this);
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitAssignStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class PrintExprContext extends StatementContext {
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
+	public static class EmptyStatementContext extends StatementContext {
 		public TerminalNode NL() { return getToken(ShackHackParser.NL, 0); }
-		public PrintExprContext(StatementContext ctx) { copyFrom(ctx); }
+		public EmptyStatementContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitPrintExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class BlankContext extends StatementContext {
-		public TerminalNode NL() { return getToken(ShackHackParser.NL, 0); }
-		public BlankContext(StatementContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitBlank(this);
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitEmptyStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -163,7 +163,7 @@ public class ShackHackParser extends Parser {
 			setState(20);
 			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 			case 1:
-				_localctx = new PrintExprContext(_localctx);
+				_localctx = new ExpressionStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(11); expression(0);
@@ -172,7 +172,7 @@ public class ShackHackParser extends Parser {
 				break;
 
 			case 2:
-				_localctx = new AssignContext(_localctx);
+				_localctx = new AssignStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(14); match(IDENTIFIER);
@@ -183,7 +183,7 @@ public class ShackHackParser extends Parser {
 				break;
 
 			case 3:
-				_localctx = new BlankContext(_localctx);
+				_localctx = new EmptyStatementContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(19); match(NL);
@@ -217,49 +217,30 @@ public class ShackHackParser extends Parser {
 			this._p = ctx._p;
 		}
 	}
-	public static class IntegerContext extends ExpressionContext {
+	public static class IntegerExpressionContext extends ExpressionContext {
 		public TerminalNode INTEGER() { return getToken(ShackHackParser.INTEGER, 0); }
-		public IntegerContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public IntegerExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitInteger(this);
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitIntegerExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class BraceContext extends ExpressionContext {
+	public static class ParenExpressionContext extends ExpressionContext {
 		public ExpressionContext inBrace;
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public TerminalNode OP_LPAREN() { return getToken(ShackHackParser.OP_LPAREN, 0); }
 		public TerminalNode OP_RPAREN() { return getToken(ShackHackParser.OP_RPAREN, 0); }
-		public BraceContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public ParenExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitBrace(this);
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitParenExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class MulDivContext extends ExpressionContext {
-		public ExpressionContext left;
-		public Token operator;
-		public ExpressionContext right;
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public TerminalNode OP_SLASH() { return getToken(ShackHackParser.OP_SLASH, 0); }
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
-		public TerminalNode OP_STAR() { return getToken(ShackHackParser.OP_STAR, 0); }
-		public MulDivContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitMulDiv(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class AddSubContext extends ExpressionContext {
+	public static class AddSubExpressionContext extends ExpressionContext {
 		public ExpressionContext left;
 		public Token operator;
 		public ExpressionContext right;
@@ -271,19 +252,38 @@ public class ShackHackParser extends Parser {
 		}
 		public TerminalNode OP_MINUS() { return getToken(ShackHackParser.OP_MINUS, 0); }
 		public TerminalNode OP_PLUS() { return getToken(ShackHackParser.OP_PLUS, 0); }
-		public AddSubContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public AddSubExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitAddSub(this);
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitAddSubExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class IdentiferContext extends ExpressionContext {
+	public static class IdentiferExpressionContext extends ExpressionContext {
 		public TerminalNode IDENTIFIER() { return getToken(ShackHackParser.IDENTIFIER, 0); }
-		public IdentiferContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public IdentiferExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitIdentifer(this);
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitIdentiferExpression(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class MulDivExpressionContext extends ExpressionContext {
+		public ExpressionContext left;
+		public Token operator;
+		public ExpressionContext right;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public TerminalNode OP_SLASH() { return getToken(ShackHackParser.OP_SLASH, 0); }
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode OP_STAR() { return getToken(ShackHackParser.OP_STAR, 0); }
+		public MulDivExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitMulDivExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -304,7 +304,7 @@ public class ShackHackParser extends Parser {
 			switch (_input.LA(1)) {
 			case INTEGER:
 				{
-				_localctx = new IntegerContext(_localctx);
+				_localctx = new IntegerExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
@@ -313,7 +313,7 @@ public class ShackHackParser extends Parser {
 				break;
 			case IDENTIFIER:
 				{
-				_localctx = new IdentiferContext(_localctx);
+				_localctx = new IdentiferExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(24); match(IDENTIFIER);
@@ -321,11 +321,11 @@ public class ShackHackParser extends Parser {
 				break;
 			case OP_LPAREN:
 				{
-				_localctx = new BraceContext(_localctx);
+				_localctx = new ParenExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(25); match(OP_LPAREN);
-				setState(26); ((BraceContext)_localctx).inBrace = expression(0);
+				setState(26); ((ParenExpressionContext)_localctx).inBrace = expression(0);
 				setState(27); match(OP_RPAREN);
 				}
 				break;
@@ -345,37 +345,37 @@ public class ShackHackParser extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 					case 1:
 						{
-						_localctx = new MulDivContext(new ExpressionContext(_parentctx, _parentState, _p));
-						((MulDivContext)_localctx).left = _prevctx;
+						_localctx = new MulDivExpressionContext(new ExpressionContext(_parentctx, _parentState, _p));
+						((MulDivExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(31);
 						if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
 						setState(32);
-						((MulDivContext)_localctx).operator = _input.LT(1);
+						((MulDivExpressionContext)_localctx).operator = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==OP_STAR || _la==OP_SLASH) ) {
-							((MulDivContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
+							((MulDivExpressionContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
 						}
 						consume();
-						setState(33); ((MulDivContext)_localctx).right = expression(6);
+						setState(33); ((MulDivExpressionContext)_localctx).right = expression(6);
 						}
 						break;
 
 					case 2:
 						{
-						_localctx = new AddSubContext(new ExpressionContext(_parentctx, _parentState, _p));
-						((AddSubContext)_localctx).left = _prevctx;
+						_localctx = new AddSubExpressionContext(new ExpressionContext(_parentctx, _parentState, _p));
+						((AddSubExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(34);
 						if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
 						setState(35);
-						((AddSubContext)_localctx).operator = _input.LT(1);
+						((AddSubExpressionContext)_localctx).operator = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==OP_MINUS || _la==OP_PLUS) ) {
-							((AddSubContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
+							((AddSubExpressionContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
 						}
 						consume();
-						setState(36); ((AddSubContext)_localctx).right = expression(5);
+						setState(36); ((AddSubExpressionContext)_localctx).right = expression(5);
 						}
 						break;
 					}

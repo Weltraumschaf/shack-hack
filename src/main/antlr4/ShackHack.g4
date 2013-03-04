@@ -17,10 +17,8 @@ package de.weltraumschaf.shackhack.antlr;
 }
 
 start       : expression ;
-expression  : left=expression operator=OP_STAR right=expression #mult
-            | left=expression operator=OP_SLASH right=expression #div
-            | left=expression operator=OP_PLUS right=expression #add
-            | left=expression operator=OP_MINUS right=expression #sub
+expression  : left=expression operator=(OP_STAR | OP_SLASH) right=expression  # mulDiv
+            | left=expression operator=(OP_PLUS | OP_MINUS) right=expression  # addSub
             | OP_LPAREN inBrace=expression OP_RPAREN #brace
             | number=INTEGER #number ;
 
@@ -32,9 +30,6 @@ OP_LPAREN   : '(' ;
 OP_RPAREN   : ')' ;
 OP_LCURLY   : '{' ;
 OP_RCURLY   : '}' ;
-
-MUL_OP      : OP_STAR | OP_SLASH ;
-ADD_OP      : OP_PLUS | OP_MINUS ;
 
 NL          : '\r'? '\n' -> skip ;
 WS          : [ \t]+ -> skip ;

@@ -31,9 +31,9 @@ public class TestBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements T
 
 	@Override public T visitInt(TestParser.IntContext ctx) { return visitChildren(ctx); }
 
+	@Override public T visitMulDiv(TestParser.MulDivContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitAddSub(TestParser.AddSubContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitParens(TestParser.ParensContext ctx) { return visitChildren(ctx); }
-
-	@Override public T visitMulDiv(TestParser.MulDivContext ctx) { return visitChildren(ctx); }
 }

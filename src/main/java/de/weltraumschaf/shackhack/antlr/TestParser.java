@@ -233,6 +233,25 @@ public class TestParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class MulDivContext extends ExprContext {
+		public ExprContext left;
+		public Token op;
+		public ExprContext right;
+		public TerminalNode DIV() { return getToken(TestParser.DIV, 0); }
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
+		}
+		public TerminalNode MUL() { return getToken(TestParser.MUL, 0); }
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
+		}
+		public MulDivContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TestVisitor ) return ((TestVisitor<? extends T>)visitor).visitMulDiv(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 	public static class AddSubContext extends ExprContext {
 		public ExprContext left;
 		public Token op;
@@ -260,25 +279,6 @@ public class TestParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof TestVisitor ) return ((TestVisitor<? extends T>)visitor).visitParens(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class MulDivContext extends ExprContext {
-		public ExprContext left;
-		public Token op;
-		public ExprContext right;
-		public TerminalNode DIV() { return getToken(TestParser.DIV, 0); }
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode MUL() { return getToken(TestParser.MUL, 0); }
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public MulDivContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TestVisitor ) return ((TestVisitor<? extends T>)visitor).visitMulDiv(this);
 			else return visitor.visitChildren(this);
 		}
 	}

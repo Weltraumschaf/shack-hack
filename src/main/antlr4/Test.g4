@@ -23,8 +23,8 @@ stat    : expr NL                                   # printExpr
         | NL                                        # blank
         ;
 
-expr    : left=expr op=( MUL | DIV ) right=expr     # MulDiv
-        | left=expr op=( ADD | SUB ) right=expr     # AddSub
+expr    : left=expr op=( MUL | DIV ) right=expr     # mulDiv
+        | left=expr op=( ADD | SUB ) right=expr     # addSub
         | INT                                       # int
         | ID                                        # id
         | '(' expr ')'                              # parens

@@ -6,3 +6,5 @@
 /nbactions.xml
 *.tokens
 /code
+*.sublime-project
+*.sublime-workspace

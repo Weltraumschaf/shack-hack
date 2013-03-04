@@ -13,12 +13,8 @@ package de.weltraumschaf.shackhack;
 
 import de.weltraumschaf.shackhack.antlr.ShackHackBaseVisitor;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser;
-import de.weltraumschaf.shackhack.antlr.ShackHackParser.AddContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.BraceContext;
-import de.weltraumschaf.shackhack.antlr.ShackHackParser.DivContext;
-import de.weltraumschaf.shackhack.antlr.ShackHackParser.MultContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.StartContext;
-import de.weltraumschaf.shackhack.antlr.ShackHackParser.SubContext;
 
 /**
  *
@@ -27,23 +23,23 @@ import de.weltraumschaf.shackhack.antlr.ShackHackParser.SubContext;
 final class ByteCodeVisitor extends ShackHackBaseVisitor<String> {
 
     @Override
-    public String visitSub(final SubContext ctx) {
-        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.ISUB.mnemonic());
+    public String visitMulDiv(final ShackHackParser.MulDivContext ctx) {
+        final String left = visit(ctx.left);
+        final String right = visit(ctx.right);
+        final String mnemonic = ctx.operator.getType() == ShackHackParser.OP_STAR
+                ? ByteCodes.IMUL.mnemonic()
+                : ByteCodes.IDIV.mnemonic();
+        return String.format("%s%n%s%n%s", left, right, mnemonic);
     }
 
     @Override
-    public String visitAdd(final AddContext ctx) {
-        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.IADD.mnemonic());
-    }
-
-    @Override
-    public String visitMult(final MultContext ctx) {
-        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.IMUL.mnemonic());
-    }
-
-    @Override
-    public String visitDiv(final DivContext ctx) {
-        return String.format("%s%n%s%n%s", visit(ctx.left), visit(ctx.right), ByteCodes.IDIV.mnemonic());
+    public String visitAddSub(final ShackHackParser.AddSubContext ctx) {
+        final String left = visit(ctx.left);
+        final String right = visit(ctx.right);
+        final String mnemonic = ctx.operator.getType() == ShackHackParser.OP_PLUS
+                ? ByteCodes.IADD.mnemonic()
+                : ByteCodes.ISUB.mnemonic();
+        return String.format("%s%n%s%n%s", left, right, mnemonic);
     }
 
     @Override

@@ -30,9 +30,9 @@ public interface TestVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitInt(TestParser.IntContext ctx);
 
+	T visitMulDiv(TestParser.MulDivContext ctx);
+
 	T visitAddSub(TestParser.AddSubContext ctx);
 
 	T visitParens(TestParser.ParensContext ctx);
-
-	T visitMulDiv(TestParser.MulDivContext ctx);
 }

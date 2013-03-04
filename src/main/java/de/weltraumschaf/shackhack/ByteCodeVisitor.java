@@ -48,8 +48,13 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<String> {
     }
 
     @Override
-    public String visitNumber(final ShackHackParser.NumberContext ctx) {
+    public String visitInteger(ShackHackParser.IntegerContext ctx) {
         return String.format("%s %s", ByteCodes.LDC.mnemonic(), ctx.getText());
+    }
+
+    @Override
+    public String visitIdentifer(ShackHackParser.IdentiferContext ctx) {
+        return super.visitIdentifer(ctx); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

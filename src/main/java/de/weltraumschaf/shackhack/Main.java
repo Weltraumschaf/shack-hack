@@ -10,6 +10,7 @@
  */
 package de.weltraumschaf.shackhack;
 
+import de.weltraumschaf.shackhack.CommandException.Code;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -29,8 +30,14 @@ public final class Main extends BaseCommand implements Runnable {
             new Main(args, System.out, System.in).run();
             System.exit(0);
         } catch (CommandException ex) {
+            if (ex.getReturnCode() == Code.SYNTAX_ERROR) {
+                System.err.print("Syntax error: ");
+            } else {
+                System.err.print("Fatal error: ");
+            }
+
             System.err.println(ex.getMessage());
-            System.exit(ex.getReturnCode());
+            System.exit(ex.getReturnCode().getCode());
         }
 
     }

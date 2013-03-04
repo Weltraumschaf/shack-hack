@@ -20,11 +20,17 @@ import org.antlr.v4.runtime.Token;
 public interface ShackHackVisitor<T> extends ParseTreeVisitor<T> {
 	T visitBrace(ShackHackParser.BraceContext ctx);
 
+	T visitInteger(ShackHackParser.IntegerContext ctx);
+
 	T visitStart(ShackHackParser.StartContext ctx);
 
 	T visitMulDiv(ShackHackParser.MulDivContext ctx);
 
+	T visitAddOps(ShackHackParser.AddOpsContext ctx);
+
 	T visitAddSub(ShackHackParser.AddSubContext ctx);
 
-	T visitNumber(ShackHackParser.NumberContext ctx);
+	T visitMulOps(ShackHackParser.MulOpsContext ctx);
+
+	T visitIdentifer(ShackHackParser.IdentiferContext ctx);
 }

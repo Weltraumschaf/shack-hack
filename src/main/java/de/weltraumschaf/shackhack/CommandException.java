@@ -9,24 +9,46 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.shackhack;
 
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class CommandException extends RuntimeException {
+class CommandException extends RuntimeException {
 
-    private final int returnCode;
+    enum Code {
+        FATAL(-1),
+        NO_FILES_TO_PARSE(-2),
+        CANT_READ_FILE(-3),
+        FOUND_ERRORS_IN_ASM(-4),
+        EXCEPTION_DUROING_ASSEMBLY(-4),
+        SYNTAX_ERROR(-5);
 
-    public CommandException(final String message, final int returnCode) {
+        private final int code;
+
+        private Code(final int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+        
+    }
+
+    private final Code returnCode;
+
+    public CommandException(final String message) {
+        this(message, Code.FATAL);
+    }
+
+    public CommandException(final String message, final Code returnCode) {
         super(message);
         this.returnCode = returnCode;
     }
 
-    public int getReturnCode() {
+    public Code getReturnCode() {
         return returnCode;
     }
-    
 }

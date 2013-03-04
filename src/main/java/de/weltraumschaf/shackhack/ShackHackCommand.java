@@ -13,6 +13,7 @@ package de.weltraumschaf.shackhack;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
+import de.weltraumschaf.shackhack.CommandException.Code;
 import de.weltraumschaf.shackhack.antlr.ShackHackLexer;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser;
 import jasmin.ClassFile;
@@ -35,10 +36,6 @@ import org.antlr.v4.runtime.TokenStream;
 class ShackHackCommand extends BaseCommand implements Runnable {
 
     private static final String ENCODING = "UTF-8";
-    private static final int ERR_NO_FILES_TO_PARSE = -1;
-    private static final int ERR_CANT_READ_FILE = -2;
-    private static final int ERR_FOUND_ERRORS_IN_ASM = -3;
-    private static final int ERR_EXCEPTION_DUROING_ASSEMBLY = -4;
     private final List<String> filesToParse = Lists.newArrayList();
     private boolean echoHelp;
     private boolean echoAssembly;
@@ -57,7 +54,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         }
 
         if (filesToParse.isEmpty()) {
-            throw new CommandException("Give at least one source file as argument!", ERR_NO_FILES_TO_PARSE);
+            throw new CommandException("Give at least one source file as argument!", Code.NO_FILES_TO_PARSE);
         }
 
         for (final String fileName : filesToParse) {
@@ -80,7 +77,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         try {
             return new Generator().generate(className, parseSource(fileName));
         } catch (IOException ex) {
-            throw new CommandException(String.format("Can't read file '%s'!", fileName), ERR_CANT_READ_FILE); // NOPMD
+            throw new CommandException(String.format("Can't read file '%s'!", fileName), Code.CANT_READ_FILE); // NOPMD
         }
     }
 
@@ -91,7 +88,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
 
             if (classFile.errorCount() > 0) {
                 throw new CommandException("Found " + classFile.errorCount() + " errors in Jasmin ASM!",
-                        ERR_FOUND_ERRORS_IN_ASM);
+                        Code.FOUND_ERRORS_IN_ASM);
             }
 
             final File outFile = new File(className + ".class");
@@ -102,7 +99,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         } catch (IOException ex) { // NOPMD
             // No IO errors w/ string readers
         } catch (Exception ex) {
-            throw new CommandException(ex.getMessage(), ERR_EXCEPTION_DUROING_ASSEMBLY); // NOPMD
+            throw new CommandException(ex.getMessage(), Code.EXCEPTION_DUROING_ASSEMBLY); // NOPMD
         }
     }
 

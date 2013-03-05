@@ -20,10 +20,10 @@ import de.weltraumschaf.shackhack.antlr.ShackHackParser.AssignStatementContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.EmptyStatementContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.ExpressionStatementContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.IdentiferExpressionContext;
-import de.weltraumschaf.shackhack.antlr.ShackHackParser.IntegerExpressionContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.MulDivExpressionContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.ParenExpressionContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.StartContext;
+import de.weltraumschaf.shackhack.antlr.ShackHackParser.ValueExpressionContext;
 import java.util.List;
 
 /**
@@ -44,7 +44,7 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
 
     @Override
     public List<Instruction> visitAssignStatement(final AssignStatementContext ctx) {
-        // TODO Implement
+        final String identifier = ctx.id.getText();
         return Lists.newArrayList();
     }
 
@@ -88,9 +88,10 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
     }
 
     @Override
-    public List<Instruction> visitIntegerExpression(final IntegerExpressionContext ctx) {
-        return Lists.newArrayList(Instruction.newInstance(ByteCode.LDC, Integer.valueOf(ctx.getText())));
+    public List<Instruction> visitValueExpression(final ValueExpressionContext ctx) {
+        return Lists.newArrayList(Instruction.newInstance(ByteCode.LDC, ctx.getText()));
     }
+
 
     @Override
     public List<Instruction> visitIdentiferExpression(final IdentiferExpressionContext ctx) {

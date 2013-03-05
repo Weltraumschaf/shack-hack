@@ -22,13 +22,13 @@ import java.util.List;
 class Instruction {
 
     private final ByteCode code;
-    private final List<Integer> args = Lists.newArrayList();
+    private final List<String> args = Lists.newArrayList();
 
     private Instruction(final ByteCode code) {
         this.code = code;
     }
 
-    public void addArgument(final int arg) {
+    public void addArgument(final String arg) {
         args.add(arg);
     }
 
@@ -37,7 +37,7 @@ class Instruction {
         final StringBuilder buffer = new StringBuilder();
         buffer.append(code.mnemonic());
 
-        for (final Integer arg : args) {
+        for (final String arg : args) {
             buffer.append(" ").append(arg);
         }
 
@@ -48,9 +48,9 @@ class Instruction {
         return new Instruction(code);
     }
 
-    public static Instruction newInstance(final ByteCode code, int ... args) {
+    public static Instruction newInstance(final ByteCode code, String ... args) {
         final Instruction instruction = newInstance(code);
-        for (final int arg : args) {
+        for (final String arg : args) {
             instruction.addArgument(arg);
         }
         return instruction;

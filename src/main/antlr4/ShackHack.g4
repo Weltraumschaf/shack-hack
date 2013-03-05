@@ -17,16 +17,17 @@ package de.weltraumschaf.shackhack.antlr;
 }
 
 start       : statement+ ;
-statement   : expression NL                     # expressionStatement
-            | IDENTIFIER OP_EQUAL expression NL # assignStatement
-            | NL                                # emptyStatement
+statement   : expression NL                                 # expressionStatement
+            | id=IDENTIFIER OP_EQUAL val=expression NL      # assignStatement
+            | NL                                            # emptyStatement
             ;
 expression  : left=expression operator=( OP_STAR | OP_SLASH ) right=expression  # mulDivExpression
             | left=expression operator=( OP_PLUS | OP_MINUS ) right=expression  # addSubExpression
-            | INTEGER                                           # integerExpression
+            | value                                             # valueExpression
             | IDENTIFIER                                        # identiferExpression
             | OP_LPAREN inBrace=expression OP_RPAREN            # parenExpression
             ;
+value       : INTEGER | FLOAT ;
 
 OP_EQUAL    : '=' ;
 OP_STAR     : '*' ;

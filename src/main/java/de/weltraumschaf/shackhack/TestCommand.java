@@ -47,7 +47,7 @@ class TestCommand extends BaseCommand implements Runnable {
             final TestVisitor eval = new TestVisitor(getOut());
             eval.visit(tree);
         } catch (IOException ex) {
-            throw new CommandException(ex.getMessage()); // NOPMD
+            throw new ShackHackException(ex.getMessage()); // NOPMD
         }
     }
 

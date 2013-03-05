@@ -14,6 +14,7 @@ package de.weltraumschaf.shackhack;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
+import de.weltraumschaf.shackhack.ShackHackException.Code;
 import java.util.Map;
 
 /**
@@ -71,7 +72,7 @@ class SymbolTable {
 
     public Entry enter(final String name) {
         if (null != lookup(name)) {
-            throw new IllegalArgumentException(String.format("Symbal with name '%s' already entered in table!", name));
+            throw new ShackHackException(String.format("Symbal with name '%s' already entered in table!", name), Code.SYNTAX_ERROR);
         }
 
         final Entry symbol = new Entry(currentSlot, name);

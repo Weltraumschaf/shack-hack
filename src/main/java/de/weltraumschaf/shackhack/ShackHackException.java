@@ -15,7 +15,7 @@ package de.weltraumschaf.shackhack;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class CommandException extends RuntimeException {
+class ShackHackException extends RuntimeException {
 
     enum Code {
         FATAL(-1),
@@ -39,11 +39,11 @@ class CommandException extends RuntimeException {
 
     private final Code returnCode;
 
-    public CommandException(final String message) {
+    public ShackHackException(final String message) {
         this(message, Code.FATAL);
     }
 
-    public CommandException(final String message, final Code returnCode) {
+    public ShackHackException(final String message, final Code returnCode) {
         super(message);
         this.returnCode = returnCode;
     }

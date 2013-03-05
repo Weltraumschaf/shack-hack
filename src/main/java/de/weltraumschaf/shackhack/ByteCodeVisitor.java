@@ -12,7 +12,7 @@
 package de.weltraumschaf.shackhack;
 
 import com.google.common.collect.Lists;
-import de.weltraumschaf.shackhack.CommandException.Code;
+import de.weltraumschaf.shackhack.ShackHackException.Code;
 import de.weltraumschaf.shackhack.antlr.ShackHackBaseVisitor;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.AddSubExpressionContext;
@@ -65,7 +65,7 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
         } else if (ctx.operator.getType() == ShackHackParser.OP_SLASH) {
             instructions.add(Instruction.newInstance(ByteCode.IDIV));
         } else {
-            throw new CommandException("Unexpected operator: " + ctx.operator, Code.SYNTAX_ERROR);
+            throw new ShackHackException("Unexpected operator: " + ctx.operator, Code.SYNTAX_ERROR);
         }
 
         return instructions;
@@ -82,7 +82,7 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
         } else if (ctx.operator.getType() == ShackHackParser.OP_MINUS) {
             instructions.add(Instruction.newInstance(ByteCode.ISUB));
         } else {
-            throw new CommandException("Unexpected operator: " + ctx.operator, Code.SYNTAX_ERROR);
+            throw new ShackHackException("Unexpected operator: " + ctx.operator, Code.SYNTAX_ERROR);
         }
 
         return instructions;

@@ -10,7 +10,7 @@
  */
 package de.weltraumschaf.shackhack;
 
-import de.weltraumschaf.shackhack.CommandException.Code;
+import de.weltraumschaf.shackhack.ShackHackException.Code;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public final class Main extends BaseCommand implements Runnable {
         try {
             new Main(args, System.out, System.in).run();
             System.exit(0);
-        } catch (CommandException ex) {
+        } catch (ShackHackException ex) {
             if (ex.getReturnCode() == Code.SYNTAX_ERROR) {
                 System.err.print("Syntax error: ");
             } else {

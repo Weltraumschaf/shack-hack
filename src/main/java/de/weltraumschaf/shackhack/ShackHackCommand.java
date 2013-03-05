@@ -13,7 +13,7 @@ package de.weltraumschaf.shackhack;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
-import de.weltraumschaf.shackhack.CommandException.Code;
+import de.weltraumschaf.shackhack.ShackHackException.Code;
 import de.weltraumschaf.shackhack.antlr.ShackHackLexer;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser;
 import jasmin.ClassFile;
@@ -54,7 +54,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         }
 
         if (filesToParse.isEmpty()) {
-            throw new CommandException("Give at least one source file as argument!", Code.NO_FILES_TO_PARSE);
+            throw new ShackHackException("Give at least one source file as argument!", Code.NO_FILES_TO_PARSE);
         }
 
         for (final String fileName : filesToParse) {
@@ -77,7 +77,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         try {
             return new Generator().generate(className, parseSource(fileName));
         } catch (IOException ex) {
-            throw new CommandException(String.format("Can't read file '%s'!", fileName), Code.CANT_READ_FILE); // NOPMD
+            throw new ShackHackException(String.format("Can't read file '%s'!", fileName), Code.CANT_READ_FILE); // NOPMD
         }
     }
 
@@ -87,7 +87,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
             classFile.readJasmin(new StringReader(asm), className, false);
 
             if (classFile.errorCount() > 0) {
-                throw new CommandException("Found " + classFile.errorCount() + " errors in Jasmin ASM!",
+                throw new ShackHackException("Found " + classFile.errorCount() + " errors in Jasmin ASM!",
                         Code.FOUND_ERRORS_IN_ASM);
             }
 
@@ -99,7 +99,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         } catch (IOException ex) { // NOPMD
             // No IO errors w/ string readers
         } catch (Exception ex) {
-            throw new CommandException(ex.getMessage(), Code.EXCEPTION_DUROING_ASSEMBLY); // NOPMD
+            throw new ShackHackException(ex.getMessage(), Code.EXCEPTION_DUROING_ASSEMBLY); // NOPMD
         }
     }
 

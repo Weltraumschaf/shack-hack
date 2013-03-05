@@ -72,7 +72,7 @@ public class SymbolTableTest {
     @Test
     public void enter_throwsExceptionOnEnteringNameTwice() {
         sut.enter("foo");
-        thrown.expect(IllegalArgumentException.class);
+        thrown.expect(ShackHackException.class);
         thrown.expectMessage("Symbal with name 'foo' already entered in table!");
         sut.enter("foo");
     }

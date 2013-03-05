@@ -25,6 +25,7 @@ import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.List;
 import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenStream;
@@ -39,6 +40,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
     private final List<String> filesToParse = Lists.newArrayList();
     private boolean echoHelp;
     private boolean echoAssembly;
+    private boolean echoDebug;
 
     public ShackHackCommand(final List<String> args, final PrintStream out, final InputStream in) {
         super(args, out, in);
@@ -103,13 +105,18 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         }
     }
 
-    static List<Instruction> parseSource(final String filename) throws IOException {
+    private List<Instruction> parseSource(final String filename) throws IOException {
         final CharStream input = new ANTLRFileStream(filename, ENCODING);
         final ShackHackLexer lexer = new ShackHackLexer(input);
         final TokenStream tokens = new CommonTokenStream(lexer);
-
         final ShackHackParser parser = new ShackHackParser(tokens);
-        return new ByteCodeVisitor().visit(parser.program());
+
+        if (echoDebug) {
+            parser.setErrorHandler(new BailErrorStrategy());
+        }
+
+        final ByteCodeVisitor visitor = new ByteCodeVisitor();
+        return visitor.visit(parser.program());
     }
 
     static String extractClassName(final String fileName) {
@@ -131,6 +138,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         getOut().println();
         getOut().println("-h|-?|--help   Show this help.");
         getOut().println("-a|--assembly  Print assembly code to STDOUT.");
+        getOut().println("-d|--debug     Print debug infos to STDOUT.");
     }
 
     private void recognizeOption(final String option) {
@@ -138,6 +146,8 @@ class ShackHackCommand extends BaseCommand implements Runnable {
             echoHelp = true;
         } else if ("-a".equals(option) || "--assembly".equals(option)) {
             echoAssembly = true;
+        } else if ("-d".equals(option) || "--debug".equals(option)) {
+            echoDebug = true;
         }
     }
 }

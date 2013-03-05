@@ -34,7 +34,7 @@ class ShackHackException extends RuntimeException {
         public int getCode() {
             return code;
         }
-        
+
     }
 
     private final Code returnCode;
@@ -50,5 +50,9 @@ class ShackHackException extends RuntimeException {
 
     public Code getReturnCode() {
         return returnCode;
+    }
+
+    public static RuntimeException syntaxException(final String msg) {
+        return new ShackHackException(msg, Code.SYNTAX_ERROR);
     }
 }

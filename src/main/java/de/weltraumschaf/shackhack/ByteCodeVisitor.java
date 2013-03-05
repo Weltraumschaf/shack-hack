@@ -66,8 +66,9 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
         if (null == symbol) {
             symbol = table.enter(identifier);
         }
-
-        instructions.add(Instruction.newInstance(ByteCode.ISTORE, symbol.getId()));
+        final Instruction instruction = Instruction.newInstance(ByteCode.ISTORE, symbol.getId());
+        instruction.setComment("store variable " + symbol.getName());
+        instructions.add(instruction);
         return instructions;
     }
 
@@ -120,7 +121,9 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
             throw ShackHackException.syntaxException(String.format("Undefined variable identifier '%s'!", identifier));
         }
 
-        return Lists.newArrayList(Instruction.newInstance(ByteCode.ILOAD, symbol.getId()));
+        final Instruction instruction = Instruction.newInstance(ByteCode.ILOAD, symbol.getId());
+        instruction.setComment("load variable " + symbol.getName());
+        return Lists.newArrayList(instruction);
     }
 
     @Override

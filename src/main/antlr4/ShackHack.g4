@@ -38,7 +38,7 @@ OP_RPAREN   : ')' ;
 OP_LCURLY   : '{' ;
 OP_RCURLY   : '}' ;
 
-NL          : '\r'? '\n' ;
+NL          : ( '\n' | '\r' |'\r\n' ) -> skip ;
 WS          : [ \t]+ -> skip ;
 
 IDENTIFIER  : LETTER (LETTER | [0-9])* ;

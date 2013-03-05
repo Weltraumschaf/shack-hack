@@ -22,7 +22,7 @@ import de.weltraumschaf.shackhack.antlr.ShackHackParser.ExpressionStatementConte
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.IdentiferExpressionContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.MulDivExpressionContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.ParenExpressionContext;
-import de.weltraumschaf.shackhack.antlr.ShackHackParser.StartContext;
+import de.weltraumschaf.shackhack.antlr.ShackHackParser.ProgramContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.ValueExpressionContext;
 import java.util.List;
 
@@ -33,7 +33,7 @@ import java.util.List;
 final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
 
     @Override
-    public List<Instruction> visitStart(final StartContext ctx) {
+    public List<Instruction> visitProgram(final ProgramContext ctx) {
         return visit(ctx.getChild(0));
     }
 
@@ -45,6 +45,7 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
     @Override
     public List<Instruction> visitAssignStatement(final AssignStatementContext ctx) {
         final String identifier = ctx.id.getText();
+        final List<Instruction> expression = visit(ctx.val);
         return Lists.newArrayList();
     }
 

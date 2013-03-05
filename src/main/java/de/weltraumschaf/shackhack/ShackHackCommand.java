@@ -109,7 +109,7 @@ class ShackHackCommand extends BaseCommand implements Runnable {
         final TokenStream tokens = new CommonTokenStream(lexer);
 
         final ShackHackParser parser = new ShackHackParser(tokens);
-        return new ByteCodeVisitor().visit(parser.start());
+        return new ByteCodeVisitor().visit(parser.program());
     }
 
     static String extractClassName(final String fileName) {

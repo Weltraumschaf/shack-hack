@@ -16,7 +16,7 @@ grammar ShackHack;
 package de.weltraumschaf.shackhack.antlr;
 }
 
-start       : statement+ ;
+program     : statement+ ;
 statement   : expression NL                                 # expressionStatement
             | id=IDENTIFIER OP_EQUAL val=expression NL      # assignStatement
             | NL                                            # emptyStatement
@@ -27,7 +27,7 @@ expression  : left=expression operator=( OP_STAR | OP_SLASH ) right=expression  
             | IDENTIFIER                                        # identiferExpression
             | OP_LPAREN inBrace=expression OP_RPAREN            # parenExpression
             ;
-value       : INTEGER | FLOAT ;
+value       : INTEGER | FLOAT | BOOLEAN ;
 
 OP_EQUAL    : '=' ;
 OP_STAR     : '*' ;
@@ -51,6 +51,10 @@ FLOAT       : ([0-9])+ '.' ([0-9])* EXPONENT?
             | ([0-9])+ EXPONENT ;
 fragment
 EXPONENT    : ('e'|'E') ('+'|'-')? ([0-9])+ ;
+
+BOOLEAN     : TRUE | FALSE ;
+TRUE        : 'true' ;
+FALSE       : 'false' ;
 
 COMMENT     : ( SL_COMMENT | ML_COMMENT ) -> skip ;
 fragment

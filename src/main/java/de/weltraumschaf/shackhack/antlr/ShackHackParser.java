@@ -31,15 +31,16 @@ public class ShackHackParser extends Parser {
 	public static final int
 		OP_EQUAL=1, OP_STAR=2, OP_SLASH=3, OP_MINUS=4, OP_PLUS=5, OP_LPAREN=6, 
 		OP_RPAREN=7, OP_LCURLY=8, OP_RCURLY=9, NL=10, WS=11, IDENTIFIER=12, INTEGER=13, 
-		FLOAT=14, COMMENT=15, SL_COMMENT=16;
+		FLOAT=14, BOOLEAN=15, TRUE=16, FALSE=17, COMMENT=18, SL_COMMENT=19;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'='", "'*'", "'/'", "'-'", "'+'", "'('", "')'", "'{'", "'}'", 
-		"NL", "WS", "IDENTIFIER", "INTEGER", "FLOAT", "COMMENT", "SL_COMMENT"
+		"NL", "WS", "IDENTIFIER", "INTEGER", "FLOAT", "BOOLEAN", "'true'", "'false'", 
+		"COMMENT", "SL_COMMENT"
 	};
 	public static final int
-		RULE_start = 0, RULE_statement = 1, RULE_expression = 2, RULE_value = 3;
+		RULE_program = 0, RULE_statement = 1, RULE_expression = 2, RULE_value = 3;
 	public static final String[] ruleNames = {
-		"start", "statement", "expression", "value"
+		"program", "statement", "expression", "value"
 	};
 
 	@Override
@@ -58,27 +59,27 @@ public class ShackHackParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
-	public static class StartContext extends ParserRuleContext {
+	public static class ProgramContext extends ParserRuleContext {
 		public List<StatementContext> statement() {
 			return getRuleContexts(StatementContext.class);
 		}
 		public StatementContext statement(int i) {
 			return getRuleContext(StatementContext.class,i);
 		}
-		public StartContext(ParserRuleContext parent, int invokingState) {
+		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_start; }
+		@Override public int getRuleIndex() { return RULE_program; }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitStart(this);
+			if ( visitor instanceof ShackHackVisitor ) return ((ShackHackVisitor<? extends T>)visitor).visitProgram(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StartContext start() throws RecognitionException {
-		StartContext _localctx = new StartContext(_ctx, getState());
-		enterRule(_localctx, 0, RULE_start);
+	public final ProgramContext program() throws RecognitionException {
+		ProgramContext _localctx = new ProgramContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_program);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -95,7 +96,7 @@ public class ShackHackParser extends Parser {
 				setState(11); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OP_LPAREN) | (1L << NL) | (1L << IDENTIFIER) | (1L << INTEGER) | (1L << FLOAT))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OP_LPAREN) | (1L << NL) | (1L << IDENTIFIER) | (1L << INTEGER) | (1L << FLOAT) | (1L << BOOLEAN))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -308,6 +309,7 @@ public class ShackHackParser extends Parser {
 			switch (_input.LA(1)) {
 			case INTEGER:
 			case FLOAT:
+			case BOOLEAN:
 				{
 				_localctx = new ValueExpressionContext(_localctx);
 				_ctx = _localctx;
@@ -405,6 +407,7 @@ public class ShackHackParser extends Parser {
 
 	public static class ValueContext extends ParserRuleContext {
 		public TerminalNode INTEGER() { return getToken(ShackHackParser.INTEGER, 0); }
+		public TerminalNode BOOLEAN() { return getToken(ShackHackParser.BOOLEAN, 0); }
 		public TerminalNode FLOAT() { return getToken(ShackHackParser.FLOAT, 0); }
 		public ValueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -426,7 +429,7 @@ public class ShackHackParser extends Parser {
 			{
 			setState(44);
 			_la = _input.LA(1);
-			if ( !(_la==INTEGER || _la==FLOAT) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INTEGER) | (1L << FLOAT) | (1L << BOOLEAN))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -459,10 +462,10 @@ public class ShackHackParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\2\3\22\61\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\3\2\6\2\f\n\2\r\2\16\2\r\3"+
+		"\2\3\25\61\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\3\2\6\2\f\n\2\r\2\16\2\r\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\31\n\3\3\4\3\4\3\4\3\4\3\4\3\4"+
 		"\3\4\5\4\"\n\4\3\4\3\4\3\4\3\4\3\4\3\4\7\4*\n\4\f\4\16\4-\13\4\3\5\3\5"+
-		"\3\5\2\6\2\4\6\b\2\5\3\4\5\3\6\7\3\17\20\63\2\13\3\2\2\2\4\30\3\2\2\2"+
+		"\3\5\2\6\2\4\6\b\2\5\3\4\5\3\6\7\3\17\21\63\2\13\3\2\2\2\4\30\3\2\2\2"+
 		"\6!\3\2\2\2\b.\3\2\2\2\n\f\5\4\3\2\13\n\3\2\2\2\f\r\3\2\2\2\r\13\3\2\2"+
 		"\2\r\16\3\2\2\2\16\3\3\2\2\2\17\20\5\6\4\2\20\21\7\f\2\2\21\31\3\2\2\2"+
 		"\22\23\7\16\2\2\23\24\7\3\2\2\24\25\5\6\4\2\25\26\7\f\2\2\26\31\3\2\2"+

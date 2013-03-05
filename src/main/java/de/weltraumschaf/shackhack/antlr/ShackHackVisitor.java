@@ -20,9 +20,9 @@ import org.antlr.v4.runtime.Token;
 public interface ShackHackVisitor<T> extends ParseTreeVisitor<T> {
 	T visitValueExpression(ShackHackParser.ValueExpressionContext ctx);
 
-	T visitStart(ShackHackParser.StartContext ctx);
-
 	T visitExpressionStatement(ShackHackParser.ExpressionStatementContext ctx);
+
+	T visitProgram(ShackHackParser.ProgramContext ctx);
 
 	T visitValue(ShackHackParser.ValueContext ctx);
 

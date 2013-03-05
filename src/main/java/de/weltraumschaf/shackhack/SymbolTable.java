@@ -24,16 +24,16 @@ import java.util.Map;
 class SymbolTable {
 
     static class Entry {
-        final int id;
-        final String name;
+        private final int id;
+        private final String name;
 
         public Entry(int id, String name) {
             this.id = id;
             this.name = name;
         }
 
-        public int getId() {
-            return id;
+        public String getId() {
+            return String.valueOf(id);
         }
 
         public String getName() {

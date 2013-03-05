@@ -30,20 +30,20 @@ public class InstructionTest {
     }
 
     @Test
-    public void toString_withOneArgs() {
+    public void toString_withOneStringArgs() {
         sut.addArgument("12");
         assertThat(sut.toString(), is("dadd 12"));
     }
 
     @Test
-    public void toString_withTwoArgs() {
+    public void toString_withTwoStringArgs() {
         sut.addArgument("1");
         sut.addArgument("2");
         assertThat(sut.toString(), is("dadd 1 2"));
     }
 
     @Test
-    public void toString_withThreeArgs() {
+    public void toString_withThreeStringArgs() {
         sut.addArgument("1");
         sut.addArgument("2");
         sut.addArgument("3");

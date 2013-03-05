@@ -35,6 +35,4 @@ public interface ShackHackVisitor<T> extends ParseTreeVisitor<T> {
 	T visitIdentiferExpression(ShackHackParser.IdentiferExpressionContext ctx);
 
 	T visitMulDivExpression(ShackHackParser.MulDivExpressionContext ctx);
-
-	T visitEmptyStatement(ShackHackParser.EmptyStatementContext ctx);
 }

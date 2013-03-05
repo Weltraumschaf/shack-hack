@@ -66,7 +66,7 @@ public class SymbolTableTest {
         final SymbolTable.Entry symbol = sut.lookup("foo");
         assertThat(symbol, notNullValue());
         assertThat(symbol.getName(), is("foo"));
-        assertThat(symbol.getId(), is(0));
+        assertThat(symbol.getId(), is("0"));
     }
 
     @Test
@@ -79,9 +79,9 @@ public class SymbolTableTest {
 
     @Test
     public void enter_eachEntryIncrementsSlot() {
-        assertThat(sut.enter("foo").getId(), is(0));
-        assertThat(sut.enter("bar").getId(), is(1));
-        assertThat(sut.enter("baz").getId(), is(2));
+        assertThat(sut.enter("foo").getId(), is("0"));
+        assertThat(sut.enter("bar").getId(), is("1"));
+        assertThat(sut.enter("baz").getId(), is("2"));
     }
 
 }

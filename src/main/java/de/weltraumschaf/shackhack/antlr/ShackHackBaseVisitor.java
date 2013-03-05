@@ -36,6 +36,4 @@ public class ShackHackBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	@Override public T visitIdentiferExpression(ShackHackParser.IdentiferExpressionContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitMulDivExpression(ShackHackParser.MulDivExpressionContext ctx) { return visitChildren(ctx); }
-
-	@Override public T visitEmptyStatement(ShackHackParser.EmptyStatementContext ctx) { return visitChildren(ctx); }
 }

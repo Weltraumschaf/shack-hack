@@ -13,11 +13,11 @@ package de.weltraumschaf.shackhack;
 
 import com.google.common.collect.Lists;
 import de.weltraumschaf.shackhack.ShackHackException.Code;
+import de.weltraumschaf.shackhack.SymbolTable.Entry;
 import de.weltraumschaf.shackhack.antlr.ShackHackBaseVisitor;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.AddSubExpressionContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.AssignStatementContext;
-import de.weltraumschaf.shackhack.antlr.ShackHackParser.EmptyStatementContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.ExpressionStatementContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.IdentiferExpressionContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.MulDivExpressionContext;
@@ -25,6 +25,7 @@ import de.weltraumschaf.shackhack.antlr.ShackHackParser.ParenExpressionContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.ProgramContext;
 import de.weltraumschaf.shackhack.antlr.ShackHackParser.ValueExpressionContext;
 import java.util.List;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
  *
@@ -32,9 +33,22 @@ import java.util.List;
  */
 final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
 
+    private final SymbolTable table = new SymbolTable();
+
+    @Override
+    protected List<Instruction> defaultResult() {
+        return Lists.newArrayList();
+    }
+
     @Override
     public List<Instruction> visitProgram(final ProgramContext ctx) {
-        return visit(ctx.getChild(0));
+        final ParseTree program = ctx.getChild(0);
+
+        if (null == program) {
+            return defaultResult();
+        }
+
+        return visit(program);
     }
 
     @Override
@@ -44,14 +58,17 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
 
     @Override
     public List<Instruction> visitAssignStatement(final AssignStatementContext ctx) {
+        final List<Instruction> instructions = Lists.newArrayList();
+        instructions.addAll(visit(ctx.val));
         final String identifier = ctx.id.getText();
-        final List<Instruction> expression = visit(ctx.val);
-        return Lists.newArrayList();
-    }
+        Entry symbol = table.lookup(identifier);
 
-    @Override
-    public List<Instruction> visitEmptyStatement(final EmptyStatementContext ctx) {
-        return Lists.newArrayList();
+        if (null == symbol) {
+            symbol = table.enter(identifier);
+        }
+
+        instructions.add(Instruction.newInstance(ByteCode.ISTORE, symbol.getId()));
+        return instructions;
     }
 
     @Override
@@ -96,13 +113,24 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
 
     @Override
     public List<Instruction> visitIdentiferExpression(final IdentiferExpressionContext ctx) {
-        // TODO Implement
-        return Lists.newArrayList();
+        final String identifier = ctx.id.getText();
+        final Entry symbol = table.lookup(identifier);
+
+        if (null == symbol) {
+            throw ShackHackException.syntaxException(String.format("Undefined variable identifier '%s'!", identifier));
+        }
+
+        return Lists.newArrayList(Instruction.newInstance(ByteCode.ILOAD, symbol.getId()));
     }
 
     @Override
     public List<Instruction> visitParenExpression(final ParenExpressionContext ctx) {
-        return visit(ctx.inBrace);
+        return visit(ctx.inParens);
+    }
+
+    @Override
+    public List<Instruction> visitValue(ShackHackParser.ValueContext ctx) {
+        return visit(ctx.getChild(0));
     }
 
 }

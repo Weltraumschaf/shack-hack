@@ -16,16 +16,15 @@ grammar ShackHack;
 package de.weltraumschaf.shackhack.antlr;
 }
 
-program     : statement+ ;
-statement   : expression NL                                 # expressionStatement
-            | id=IDENTIFIER OP_EQUAL val=expression NL      # assignStatement
-            | NL                                            # emptyStatement
+program     : statement? | ( statement NL )* ;
+statement   : expression                                  # expressionStatement
+            | id=IDENTIFIER OP_EQUAL val=expression       # assignStatement
             ;
 expression  : left=expression operator=( OP_STAR | OP_SLASH ) right=expression  # mulDivExpression
             | left=expression operator=( OP_PLUS | OP_MINUS ) right=expression  # addSubExpression
-            | value                                             # valueExpression
-            | IDENTIFIER                                        # identiferExpression
-            | OP_LPAREN inBrace=expression OP_RPAREN            # parenExpression
+            | val=value                                         # valueExpression
+            | id=IDENTIFIER                                     # identiferExpression
+            | OP_LPAREN inParens=expression OP_RPAREN           # parenExpression
             ;
 value       : INTEGER | FLOAT | BOOLEAN ;
 
@@ -39,7 +38,7 @@ OP_RPAREN   : ')' ;
 OP_LCURLY   : '{' ;
 OP_RCURLY   : '}' ;
 
-NL          : '\r'? '\n' -> skip ;
+NL          : '\r'? '\n' ;
 WS          : [ \t]+ -> skip ;
 
 IDENTIFIER  : LETTER (LETTER | [0-9])* ;

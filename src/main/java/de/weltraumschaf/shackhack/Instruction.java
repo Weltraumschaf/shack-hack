@@ -23,6 +23,7 @@ class Instruction {
 
     private final ByteCode code;
     private final List<String> args = Lists.newArrayList();
+    private String comment;
 
     private Instruction(final ByteCode code) {
         this.code = code;
@@ -32,6 +33,10 @@ class Instruction {
         args.add(arg);
     }
 
+    public void setComment(final String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public String toString() {
         final StringBuilder buffer = new StringBuilder();
@@ -39,6 +44,10 @@ class Instruction {
 
         for (final String arg : args) {
             buffer.append(" ").append(arg);
+        }
+
+        if (null != comment) {
+            buffer.append(" ; ").append(comment);
         }
 
         return buffer.toString();
@@ -55,4 +64,5 @@ class Instruction {
         }
         return instruction;
     }
+
 }

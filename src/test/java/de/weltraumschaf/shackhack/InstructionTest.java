@@ -30,9 +30,22 @@ public class InstructionTest {
     }
 
     @Test
+    public void toString_withNoArgsAndComment() {
+        sut.setComment("a comment");
+        assertThat(sut.toString(), is("dadd ; a comment"));
+    }
+
+    @Test
     public void toString_withOneStringArgs() {
         sut.addArgument("12");
         assertThat(sut.toString(), is("dadd 12"));
+    }
+
+    @Test
+    public void toString_withOneStringArgsAndComment() {
+        sut.addArgument("12");
+        sut.setComment("a comment");
+        assertThat(sut.toString(), is("dadd 12 ; a comment"));
     }
 
     @Test
@@ -43,11 +56,28 @@ public class InstructionTest {
     }
 
     @Test
+    public void toString_withTwoStringArgsAndComment() {
+        sut.addArgument("1");
+        sut.addArgument("2");
+        sut.setComment("a comment");
+        assertThat(sut.toString(), is("dadd 1 2 ; a comment"));
+    }
+
+    @Test
     public void toString_withThreeStringArgs() {
         sut.addArgument("1");
         sut.addArgument("2");
         sut.addArgument("3");
         assertThat(sut.toString(), is("dadd 1 2 3"));
+    }
+    
+    @Test
+    public void toString_withThreeStringArgsAndComment() {
+        sut.addArgument("1");
+        sut.addArgument("2");
+        sut.addArgument("3");
+        sut.setComment("a comment");
+        assertThat(sut.toString(), is("dadd 1 2 3 ; a comment"));
     }
 
 }

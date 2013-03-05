@@ -70,7 +70,7 @@ public class InstructionTest {
         sut.addArgument("3");
         assertThat(sut.toString(), is("dadd 1 2 3"));
     }
-    
+
     @Test
     public void toString_withThreeStringArgsAndComment() {
         sut.addArgument("1");

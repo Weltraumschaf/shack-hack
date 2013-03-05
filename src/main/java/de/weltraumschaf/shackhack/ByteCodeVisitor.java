@@ -66,6 +66,7 @@ final class ByteCodeVisitor extends ShackHackBaseVisitor<List<Instruction>> {
         if (null == symbol) {
             symbol = table.enter(identifier);
         }
+
         final Instruction instruction = Instruction.newInstance(ByteCode.ISTORE, symbol.getId());
         instruction.setComment("store variable " + symbol.getName());
         instructions.add(instruction);
